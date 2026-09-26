@@ -20,6 +20,9 @@ pwsh build-installer.ps1
 | **Uninstall** | Settings → Apps, or `%LOCALAPPDATA%\CopyPasta\Update.exe --uninstall` |
 | **Runtime** | Self-contained; no .NET install needed |
 
+Released at https://github.com/acidgrafix-code/CopyPasta/releases/tag/v1.0.0, which is also the
+feed the app updates itself from.
+
 **It is unsigned**, so downloading it elsewhere will show "Windows protected your PC". Click *More
 info → Run anyway*. That disappears once a code-signing certificate is added — no code change
 needed.
@@ -83,9 +86,17 @@ Shortcuts.
 20. Set a shortcut in **Shortcuts**. If you pick one another app already owns, the log will say
     so rather than failing silently.
 
+### Updates
+21. Tray menu → **Check for Updates…**, then look in the log for an `updates:` line. On 1.0.0 it
+    should say `1.0.0 is current` — that means it reached the GitHub release feed and compared
+    versions.
+22. Settings → **Updates** shows the same thing with a *Check Now* button and the last check time.
+23. A newer release is downloaded in the background and applied the next time you quit and reopen
+    CopyPasta. It will not restart itself while you are using it.
+
 ### Lifecycle
-21. Quit from the tray menu. Relaunch from the Start Menu — your history should still be there.
-22. Turn on **General → Start CopyPasta when I sign in**, then check Task Manager → Startup.
+24. Quit from the tray menu. Relaunch from the Start Menu — your history should still be there.
+25. Turn on **General → Start CopyPasta when I sign in**, then check Task Manager → Startup.
 
 ---
 
@@ -98,10 +109,9 @@ These are known and deliberate, not things to report:
   the title with no hover preview. Needs a custom popup to fix.
 - **Per-folder snippet hotkeys** need the folder's id hand-written into `settings.json`; the
   editor has no recorder for them yet.
-- **Auto-update is wired but has no feed.** Nothing to update from until releases are published to
-  the GitHub repo.
 - **Unsigned.** See above.
-- **Some translated strings still say "Clipy"** in non-English languages. English is clean.
+- **No German/Japanese/etc. Settings window.** Only the tray menu and the clear-history dialog are
+  translated; the Settings and snippet windows are English in every language.
 
 ---
 
