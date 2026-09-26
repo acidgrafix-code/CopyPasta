@@ -43,6 +43,15 @@ public static class UpdateSchedule
     /// </remarks>
     public static TimeSpan PollInterval { get; } = TimeSpan.FromMinutes(15);
 
+    /// <summary>How long after starting to run the first check, when one is due.</summary>
+    /// <remarks>
+    /// Waiting a whole <see cref="PollInterval"/> for the first tick would mean a user who opens
+    /// the app for a few minutes at a time never checks at all. Short, but not immediate: startup
+    /// is already registering hotkeys, opening the database and reading the clipboard, and an
+    /// update check is the least urgent of those.
+    /// </remarks>
+    public static TimeSpan StartupDelay { get; } = TimeSpan.FromSeconds(30);
+
     /// <summary>The interval a policy actually uses, after clamping.</summary>
     public static TimeSpan EffectiveInterval(UpdatePolicy policy)
     {

@@ -84,6 +84,15 @@ public class UpdateScheduleTests
     }
 
     [Fact]
+    public void The_first_check_happens_soon_after_starting_rather_than_a_poll_later()
+    {
+        // Otherwise someone who uses the app in short bursts never reaches a first tick, and so
+        // never checks at all however long the app has been installed.
+        Assert.True(UpdateSchedule.StartupDelay < UpdateSchedule.PollInterval);
+        Assert.True(UpdateSchedule.StartupDelay > TimeSpan.Zero);
+    }
+
+    [Fact]
     public void The_default_policy_matches_the_macOS_one()
     {
         Assert.True(UpdatePolicy.Default.Automatic);

@@ -834,7 +834,7 @@ public sealed class TrayApplication : IDisposable
         _updateTimer = new Timer(
             _ => _ = CheckForUpdatesAsync(automatic: true),
             null,
-            UpdateSchedule.PollInterval,
+            UpdateSchedule.StartupDelay,
             UpdateSchedule.PollInterval);
 
         Log($"updates: installed version {_updates.CurrentVersion}, "
