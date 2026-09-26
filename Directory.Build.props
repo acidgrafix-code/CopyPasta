@@ -1,0 +1,29 @@
+<Project>
+
+  <!--
+    Shared assembly metadata. Applied to every project in the tree, so the executable, the
+    installer and the Properties dialog all agree without repeating it per project.
+  -->
+  <PropertyGroup>
+    <Product>CopyPasta</Product>
+    <Company>ACIDgrafix, LLC</Company>
+    <Authors>ACIDgrafix, LLC</Authors>
+    <Copyright>© 2026 ACIDgrafix, LLC</Copyright>
+    <Description>A clipboard manager for Windows. Keeps a history of what you copy and pastes it back.</Description>
+
+    <!--
+      Version is the single source of truth for the app, the installer and the update feed.
+      AssemblyVersion stays on the major only, so a patch release does not break binding.
+    -->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0</InformationalVersion>
+
+    <RepositoryUrl>https://github.com/acidgrafix-code/CopyPasta</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/acidgrafix-code/CopyPasta</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+</Project>

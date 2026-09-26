@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <!-- The Windows SDK projection, for Windows.Media.Ocr. Runs on Windows 10 1809 and later. -->
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <LangVersion>13</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- Required by the LibraryImport source generator, which emits unsafe marshalling stubs. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>CopyPasta.Interop</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Menu thumbnails and the generated tray glyph need GDI+ image handling. -->
+    <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The app's dump-menu diagnostic inspects the built HMENU. -->
+    <InternalsVisibleTo Include="CopyPasta" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CopyPasta.Core\CopyPasta.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,45 @@
+<Window x:Class="CopyPasta.App.Settings.ConfirmClearHistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Clear History"
+        SizeToContent="Height"
+        Width="420"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False">
+
+    <StackPanel Margin="20">
+        <TextBlock x:Name="MessageText"
+                   FontWeight="SemiBold"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,8"
+                   Text="Clear History" />
+
+        <TextBlock x:Name="DetailText"
+                   TextWrapping="Wrap"
+                   Opacity="0.8"
+                   Margin="0,0,0,16"
+                   Text="Are you sure you want to clear your clipboard history?" />
+
+        <!-- The suppression checkbox is what turns the setting off, matching macOS. -->
+        <CheckBox x:Name="DoNotAskAgain"
+                  Content="Don't ask again"
+                  Margin="0,0,0,16" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="CancelButton"
+                    Content="Cancel"
+                    IsCancel="True"
+                    MinWidth="90"
+                    Padding="12,4"
+                    Margin="0,0,8,0"
+                    Click="OnCancel" />
+            <Button x:Name="ConfirmButton"
+                    Content="Clear History"
+                    IsDefault="True"
+                    MinWidth="110"
+                    Padding="12,4"
+                    Click="OnConfirm" />
+        </StackPanel>
+    </StackPanel>
+</Window>

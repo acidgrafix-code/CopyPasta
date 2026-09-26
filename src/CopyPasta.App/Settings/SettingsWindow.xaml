@@ -1,0 +1,290 @@
+<Window x:Class="CopyPasta.App.Settings.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:settings="clr-namespace:CopyPasta.App.Settings"
+        Title="Settings"
+        Height="620"
+        Width="740"
+        MinHeight="480"
+        MinWidth="640"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Hint">
+            <Setter Property="Opacity" Value="0.7" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,0,0,12" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Heading">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,12,0,8" />
+        </Style>
+        <Style TargetType="StackPanel" x:Key="Pane">
+            <Setter Property="Margin" Value="16" />
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="StatusText" Text="Changes take effect immediately." />
+            </StatusBarItem>
+        </StatusBar>
+
+        <TabControl x:Name="Tabs" Margin="8">
+
+            <!-- ============================ General ============================ -->
+            <TabItem Header="General">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Style="{StaticResource Pane}">
+                        <CheckBox x:Name="LaunchAtLogin" Content="Start CopyPasta when I sign in" Click="OnChanged" />
+                        <CheckBox x:Name="PastesAutomatically" Content="Paste automatically after choosing an item" Click="OnChanged" />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="History limit" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="MaximumHistoryCount" Width="80" LostFocus="OnChanged" />
+                            <TextBlock Text="items" Margin="8,4,0,0" />
+                        </StackPanel>
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Sort history by" />
+                        <ComboBox x:Name="SortOrder" Width="200" HorizontalAlignment="Left" SelectionChanged="OnChanged">
+                            <ComboBoxItem Content="Date created" />
+                            <ComboBoxItem Content="Last used" />
+                        </ComboBox>
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Automatic history deletion" />
+                        <CheckBox x:Name="ClearsHistoryOnQuit" Content="Clear history when CopyPasta quits" Click="OnChanged" />
+                        <CheckBox x:Name="ClearsHistoryPeriodically" Content="Clear history periodically" Click="OnChanged" />
+                        <ComboBox x:Name="ClearInterval" Width="200" HorizontalAlignment="Left" Margin="20,0,0,8" SelectionChanged="OnChanged" />
+                        <TextBlock Style="{StaticResource Hint}"
+                                   Text="Clears all history at the selected interval while CopyPasta is running. Snippets are not deleted." />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Tray icon" />
+                        <ComboBox x:Name="TrayStyle" Width="200" HorizontalAlignment="Left" SelectionChanged="OnChanged">
+                            <ComboBoxItem Content="Light (for a dark taskbar)" />
+                            <ComboBoxItem Content="Dark (for a light taskbar)" />
+                            <ComboBoxItem Content="Hidden" />
+                        </ComboBox>
+                        <TextBlock Style="{StaticResource Hint}" Margin="0,8,0,0"
+                                   Text="Windows has no equivalent of a template image, so the tray glyph does not invert itself." />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ============================ Menu ============================ -->
+            <TabItem Header="Menu">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Style="{StaticResource Pane}">
+                        <CheckBox x:Name="ShowsNumbers" Content="Number menu items" Click="OnChanged" />
+                        <CheckBox x:Name="StartsNumberingAtZero" Content="Start numbering at 0" Click="OnChanged" />
+                        <CheckBox x:Name="AddsNumericAccelerators" Content="Let the first ten items be chosen by number" Click="OnChanged" />
+                        <CheckBox x:Name="ShowsToolTips" Content="Show tooltips on menu items" Click="OnChanged" />
+                        <TextBlock Style="{StaticResource Hint}"
+                                   Text="Windows menus cannot show per-item tooltips, so this has no effect yet." />
+                        <CheckBox x:Name="ShowsIconsInMenu" Content="Show icons beside menu items" Click="OnChanged" />
+                        <CheckBox x:Name="ShowsImages" Content="Show image previews" Click="OnChanged" />
+                        <CheckBox x:Name="ShowsColorPreviews" Content="Show colour swatches" Click="OnChanged" />
+                        <CheckBox x:Name="ShowsClearHistoryCommand" Content="Add a menu item to clear clipboard history" Click="OnChanged" />
+                        <CheckBox x:Name="ShowsClearHistoryAlert" Content="Confirm before clearing history" Click="OnChanged" />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Items shown directly in the menu" />
+                        <TextBox x:Name="InlineItemLimit" Width="80" HorizontalAlignment="Left" LostFocus="OnChanged" />
+                        <TextBlock Style="{StaticResource Hint}" Margin="0,8,0,12"
+                                   Text="Additional history is grouped into folders. Set to 0 to group all history into folders." />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Items per folder" />
+                        <TextBox x:Name="FolderItemLimit" Width="80" HorizontalAlignment="Left" LostFocus="OnChanged" />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Maximum title length" />
+                        <TextBox x:Name="MaximumTitleLength" Width="80" HorizontalAlignment="Left" LostFocus="OnChanged" />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Maximum tooltip length" />
+                        <TextBox x:Name="MaximumToolTipLength" Width="80" HorizontalAlignment="Left" LostFocus="OnChanged" />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Preview size" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="ThumbnailWidth" Width="70" LostFocus="OnChanged" />
+                            <TextBlock Text="×" Margin="8,4,8,0" />
+                            <TextBox x:Name="ThumbnailHeight" Width="70" LostFocus="OnChanged" />
+                            <TextBlock Text="px" Margin="8,4,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ============================ Type ============================ -->
+            <TabItem Header="Type">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Style="{StaticResource Pane}">
+                        <TextBlock Style="{StaticResource Hint}" Text="Choose which kinds of copied content are saved." />
+                        <ItemsControl x:Name="ContentTypes">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding Label}"
+                                              IsChecked="{Binding IsEnabled, Mode=TwoWay}"
+                                              Click="OnChanged" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Privacy" />
+                        <CheckBox x:Name="IgnoresConcealedContent" Content="Skip content marked as sensitive (passwords)" Click="OnChanged" />
+                        <CheckBox x:Name="IgnoresCloudClipboard" Content="Skip content copied on another device" Click="OnChanged" />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Screenshots and text" />
+                        <CheckBox x:Name="ObservesScreenshots" Content="Save screenshots to the history as they are taken" Click="OnChanged" />
+                        <CheckBox x:Name="RecognizesTextInImages" Content="Read text in images so they can be searched" Click="OnChanged" />
+                        <TextBlock x:Name="OcrStatus" Style="{StaticResource Hint}" />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Storage budget" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="MaximumHistoryMegabytes" Width="80" LostFocus="OnChanged" />
+                            <TextBlock Text="MB (0 for no limit)" Margin="8,4,0,0" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource Hint}" Margin="0,8,0,0"
+                                   Text="The oldest clips are removed once the stored history exceeds this. A count alone says nothing about size when one clip can be a line of text and the next a full-screen image." />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Duplicates" />
+                        <CheckBox x:Name="AllowsDuplicates" Content="Save content that is already in the history" Click="OnChanged" />
+                        <CheckBox x:Name="OverwritesDuplicates" Content="Move a repeated copy to the top instead of adding a second entry" Click="OnChanged" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ============================ Exclude ============================ -->
+            <TabItem Header="Exclude">
+                <DockPanel Margin="16">
+                    <TextBlock DockPanel.Dock="Top" Style="{StaticResource Hint}"
+                               Text="Add an app to stop saving its clipboard history." />
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button Content="Add App…" Click="OnAddExcludedApp" Padding="12,4" Margin="0,0,8,0" />
+                        <Button Content="Remove" Click="OnRemoveExcludedApp" Padding="12,4" />
+                    </StackPanel>
+                    <ListBox x:Name="ExcludedApps" />
+                </DockPanel>
+            </TabItem>
+
+            <!-- ============================ Shortcuts ============================ -->
+            <TabItem Header="Shortcuts">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Style="{StaticResource Pane}">
+                        <TextBlock Style="{StaticResource Hint}"
+                                   Text="Click a shortcut and press a combination. Esc cancels, Backspace clears." />
+                        <Grid x:Name="ShortcutGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="220" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Main menu" Margin="0,0,0,10" />
+                            <settings:HotkeyRecorder x:Name="MainMenuHotkey" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,10" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="History menu" Margin="0,0,0,10" />
+                            <settings:HotkeyRecorder x:Name="HistoryMenuHotkey" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,10" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Snippet menu" Margin="0,0,0,10" />
+                            <settings:HotkeyRecorder x:Name="SnippetMenuHotkey" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,10" />
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Edit snippets" Margin="0,0,0,10" />
+                            <settings:HotkeyRecorder x:Name="EditSnippetsHotkey" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,10" />
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Clear history" Margin="0,0,0,10" />
+                            <settings:HotkeyRecorder x:Name="ClearHistoryHotkey" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,10" />
+                        </Grid>
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Paste modifiers" />
+                        <TextBlock Style="{StaticResource Hint}"
+                                   Text="Hold a modifier while choosing a history item to change what happens." />
+
+                        <CheckBox x:Name="PastesPlainTextWithModifier" Content="Paste as plain text" Click="OnChanged" />
+                        <ComboBox x:Name="PlainTextModifier" Width="140" HorizontalAlignment="Left" Margin="20,0,0,12" SelectionChanged="OnChanged" />
+
+                        <CheckBox x:Name="DeletesWithModifier" Content="Delete without pasting" Click="OnChanged" />
+                        <ComboBox x:Name="DeleteModifier" Width="140" HorizontalAlignment="Left" Margin="20,0,0,12" SelectionChanged="OnChanged" />
+
+                        <CheckBox x:Name="PastesAndDeletesWithModifier" Content="Paste and then delete" Click="OnChanged" />
+                        <ComboBox x:Name="PasteAndDeleteModifier" Width="140" HorizontalAlignment="Left" Margin="20,0,0,12" SelectionChanged="OnChanged" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ============================ Updates ============================ -->
+            <TabItem Header="Updates">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Style="{StaticResource Pane}">
+                        <CheckBox x:Name="AutomaticallyChecksForUpdates" Content="Automatically check for updates" Click="OnChanged" />
+                        <ComboBox x:Name="UpdateCheckInterval" Width="200" HorizontalAlignment="Left" Margin="20,0,0,8" SelectionChanged="OnChanged" />
+                        <TextBlock Style="{StaticResource Hint}"
+                                   Text="A new version is downloaded in the background and applied the next time you quit and reopen CopyPasta. It will not restart itself while you are using it." />
+
+                        <TextBlock Style="{StaticResource Heading}" Text="Status" />
+                        <TextBlock x:Name="VersionText" Style="{StaticResource Hint}" />
+                        <TextBlock x:Name="UpdateStatusText" Style="{StaticResource Hint}" />
+                        <Button x:Name="CheckNowButton" Content="Check Now" Width="120" HorizontalAlignment="Left" Click="OnCheckForUpdates" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ============================ Beta ============================ -->
+            <TabItem Header="Beta">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Style="{StaticResource Pane}">
+                        <TextBlock Style="{StaticResource Heading}" Text="Settings coverage" />
+                        <TextBlock x:Name="CoverageSummary" Style="{StaticResource Hint}" />
+                        <TextBlock Style="{StaticResource Hint}"
+                                   Text="Settings this port adds that the macOS app has no equivalent for:" />
+                        <ItemsControl x:Name="AdditionsList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,0,10">
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding Title}" />
+                                        <TextBlock Opacity="0.7" TextWrapping="Wrap" Text="{Binding Note}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <TextBlock Style="{StaticResource Hint}" Margin="0,12,0,8"
+                                   Text="Settings from the macOS app that are not carried over, and why:" />
+                        <ItemsControl x:Name="CoverageList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,0,10">
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding Title}" />
+                                        <TextBlock Opacity="0.7" TextWrapping="Wrap" Text="{Binding Note}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ============================ About ============================ -->
+            <TabItem Header="About">
+                <StackPanel Style="{StaticResource Pane}">
+                    <TextBlock Style="{StaticResource Heading}" Text="CopyPasta" />
+                    <TextBlock Style="{StaticResource Hint}" TextWrapping="Wrap"
+                               Text="A Windows port of Clipy, the macOS clipboard manager by the Clipy Project, which is itself derived from ClipMenu by naotaka. Both are MIT licensed." />
+                    <TextBlock Style="{StaticResource Hint}" TextWrapping="Wrap"
+                               Text="Clipy's own icons are copyrighted separately from its MIT code grant and are not used here. CopyPasta's artwork is its own." />
+                    <TextBlock Style="{StaticResource Hint}" TextWrapping="Wrap"
+                               Text="Translations are reused from the Clipy string catalogues." />
+                    <TextBlock x:Name="LocaleText" Style="{StaticResource Hint}" />
+                    <TextBlock x:Name="PathsText" Style="{StaticResource Hint}" />
+                </StackPanel>
+            </TabItem>
+
+        </TabControl>
+    </DockPanel>
+</Window>

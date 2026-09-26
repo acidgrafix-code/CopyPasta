@@ -1,0 +1,17 @@
+# Build output
+bin/
+obj/
+artifacts/
+
+# The upstream macOS source, kept locally so tools/ExtractStrings.ps1 can read the string
+# catalogues. It is a whole separate project and does not belong in this repository's history;
+# the extracted tables in src/CopyPasta.App/Resources/Strings are committed instead.
+Clipy-develop/
+
+# Local tooling
+.vs/
+*.user
+*.suo
+
+# Scratch
+*.log

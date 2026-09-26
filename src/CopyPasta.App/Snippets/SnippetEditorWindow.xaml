@@ -1,0 +1,115 @@
+<Window x:Class="CopyPasta.App.Snippets.SnippetEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:snippets="clr-namespace:CopyPasta.App.Snippets"
+        Title="Edit Snippets"
+        Height="560"
+        Width="860"
+        MinHeight="360"
+        MinWidth="640"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!--
+            The tree holds folders at the top level and snippets beneath them, matching the
+            NSOutlineView the macOS editor uses.
+        -->
+        <HierarchicalDataTemplate DataType="{x:Type snippets:FolderNode}"
+                                  ItemsSource="{Binding Snippets}">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsChecked="{Binding IsEnabled, Mode=OneWay}"
+                          IsHitTestVisible="False"
+                          Focusable="False"
+                          VerticalAlignment="Center"
+                          Margin="0,0,6,0" />
+                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <DataTemplate DataType="{x:Type snippets:SnippetNode}">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsChecked="{Binding IsEnabled, Mode=OneWay}"
+                          IsHitTestVisible="False"
+                          Focusable="False"
+                          VerticalAlignment="Center"
+                          Margin="0,0,6,0" />
+                <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button x:Name="AddFolderButton" Click="OnAddFolder" ToolTip="Add a folder" Content="New Folder" />
+                <Button x:Name="AddSnippetButton" Click="OnAddSnippet" ToolTip="Add a snippet" Content="New Snippet" />
+                <Separator />
+                <Button x:Name="ToggleButton" Click="OnToggleEnabled" ToolTip="Enable or disable" Content="Enable/Disable" />
+                <Button x:Name="DeleteButton" Click="OnDelete" ToolTip="Delete the selected item" Content="Delete" />
+                <Separator />
+                <Button x:Name="ImportButton" Click="OnImport" ToolTip="Import snippets from XML" Content="Import…" />
+                <Button x:Name="ExportButton" Click="OnExport" ToolTip="Export snippets to XML" Content="Export…" />
+            </ToolBar>
+        </ToolBarTray>
+
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="StatusText" Text="Changes are saved as you make them." />
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" MinWidth="200" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MinWidth="280" />
+            </Grid.ColumnDefinitions>
+
+            <TreeView x:Name="Tree"
+                      Grid.Column="0"
+                      Margin="8"
+                      AllowDrop="True"
+                      SelectedItemChanged="OnSelectionChanged"
+                      PreviewMouseLeftButtonDown="OnTreeMouseDown"
+                      MouseMove="OnTreeMouseMove"
+                      Drop="OnTreeDrop"
+                      DragOver="OnTreeDragOver"
+                      ItemsSource="{Binding Folders}">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="IsExpanded" Value="True" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>
+
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" />
+
+            <Grid Grid.Column="2" Margin="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Title" Margin="0,0,0,4" />
+                <TextBox x:Name="TitleBox"
+                         Grid.Row="1"
+                         Margin="0,0,0,10"
+                         LostFocus="OnTitleCommitted"
+                         KeyDown="OnTitleKeyDown" />
+
+                <DockPanel Grid.Row="2">
+                    <TextBlock DockPanel.Dock="Top" Text="Content" Margin="0,0,0,4" />
+                    <TextBox x:Name="ContentBox"
+                             AcceptsReturn="True"
+                             AcceptsTab="True"
+                             TextWrapping="NoWrap"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Auto"
+                             FontFamily="Consolas"
+                             LostFocus="OnContentCommitted" />
+                </DockPanel>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

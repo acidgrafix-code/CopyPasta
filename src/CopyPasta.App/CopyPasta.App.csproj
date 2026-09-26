@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <!-- The Windows SDK projection, for Windows.Media.Ocr. Runs on Windows 10 1809 and later. -->
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <LangVersion>13</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>CopyPasta.App</RootNamespace>
+    <AssemblyName>CopyPasta</AssemblyName>
+    <!-- Tray-only, like the macOS app's LSUIElement: no main window, no taskbar button. -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!--
+      Conditional so the build works before the artwork exists. Drop app.ico into
+      Resources\Icons\ and it is picked up on the next build with nothing else to change.
+      See ASSETS_REQUIRED.md.
+    -->
+    <ApplicationIcon Condition="Exists('Resources\Icons\app.ico')">Resources\Icons\app.ico</ApplicationIcon>
+    <!--
+      WPF is used only for the snippet editor window. The tray icon and menus stay on raw Win32,
+      because a native HMENU is what makes the menu feel like the shell's own.
+    -->
+    <UseWPF>true</UseWPF>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      Translations extracted from Clipy's string catalogues by tools/ExtractStrings.ps1. Embedded
+      so the app stays a single self-contained executable.
+
+      WithCulture=false is required, not cosmetic: a file named strings.de.json matches MSBuild's
+      name.<culture>.ext pattern, so AssignCulture infers a culture and routes it into a satellite
+      assembly instead of the main one. The files then vanish from the manifest entirely.
+      LogicalName pins the lookup name so it does not depend on folder layout.
+    -->
+    <EmbeddedResource Include="Resources\Strings\*.json">
+      <WithCulture>false</WithCulture>
+      <LogicalName>CopyPasta.App.Resources.Strings.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      Tray and menu icons are loaded at runtime rather than embedded: LoadImage picks the frame
+      matching the current DPI straight out of the .ico, which an embedded resource cannot do.
+      The licence notices ship alongside because both MIT grants require it.
+    -->
+    <Content Include="Resources\Icons\tray-light.ico" CopyToOutputDirectory="PreserveNewest" Link="tray-light.ico" Condition="Exists('Resources\Icons\tray-light.ico')" />
+    <Content Include="Resources\Icons\tray-dark.ico" CopyToOutputDirectory="PreserveNewest" Link="tray-dark.ico" Condition="Exists('Resources\Icons\tray-dark.ico')" />
+    <Content Include="Resources\Icons\menu-folder.ico" CopyToOutputDirectory="PreserveNewest" Link="menu-folder.ico" Condition="Exists('Resources\Icons\menu-folder.ico')" />
+    <Content Include="Resources\Icons\menu-snippet.ico" CopyToOutputDirectory="PreserveNewest" Link="menu-snippet.ico" Condition="Exists('Resources\Icons\menu-snippet.ico')" />
+    <Content Include="..\..\LICENSE" CopyToOutputDirectory="PreserveNewest" Link="LICENSE" />
+    <Content Include="..\..\THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" Link="THIRD-PARTY-NOTICES.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CopyPasta.Data\CopyPasta.Data.csproj" />
+    <ProjectReference Include="..\CopyPasta.Interop\CopyPasta.Interop.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Velopack" Version="1.2.158" />
+  </ItemGroup>
+
+</Project>
