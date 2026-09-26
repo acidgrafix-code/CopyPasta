@@ -6,6 +6,8 @@ a global hotkey, with reusable snippets alongside it.
 It is a port of [Clipy](https://clipy-app.com/), the macOS clipboard manager, which is itself
 derived from ClipMenu. Both are MIT licensed. See [Attribution](#attribution).
 
+**[User Guide](GUIDE.md)** — what everything does and how to use it.
+
 ## What it does
 
 - **Clipboard history** — text, rich text, images, files and colour codes, with thumbnails and
